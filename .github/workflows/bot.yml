@@ -1,0 +1,65 @@
+name: 🇵🇸 24/7 
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 🔄 Har 1 ghante me auto restart
+  workflow_dispatch:  # 🖱 Manually start karne ka option
+
+permissions:  
+  actions: write  # ✅ Old workflows cancel karne ke liye
+  contents: read  
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 **Repo Clone**
+        uses: actions/checkout@v3
+
+      - name: ⚙️ **Install GitHub CLI & JQ **
+        run: sudo apt update && sudo apt install gh jq -y
+
+      - name: 🔑 **GitHub CLI Authenticate**
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          gh repo set-default "${{ github.repository }}"
+
+      - name: 🛑 **Old Jobs Cancellation & Wait Until Fully Canceled**
+        run: |
+          echo "🔍 Checking for old running workflows..."
+          latest_run_id=$(gh run list --limit 1 --json databaseId | jq -r '.[0].databaseId' || echo "")
+
+          if [[ -z "$latest_run_id" ]]; then
+            echo "⚠ No previous jobs found. Continuing..."
+          else
+            while true; do
+              old_jobs_cancelled=true  
+
+              for run_id in $(gh run list --limit 50 --json databaseId,status | jq -r '.[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting" or .status == "requested") | .databaseId' || echo ""); do
+                if [[ "$run_id" != "$latest_run_id" ]]; then
+                  echo "🚫 Cancelling Workflow ID: $run_id"
+                  gh run cancel "$run_id"
+                  old_jobs_cancelled=false
+                fi
+              done
+
+              if [[ "$old_jobs_cancelled" == "true" ]]; then
+                echo "✅ All old workflows successfully canceled! Bot starting now..."
+                break  
+              fi
+
+              echo "⏳ Waiting for all old jobs to be canceled..."
+              sleep 5  
+            done
+          fi
+
+      - name: 🐍 **Making friends**
+        run: sudo apt update && sudo apt install python3 python3-pip -y
+
+      - name: 📦 **Dependencies Install**
+        run: pip install -r requirements.txt
+
+      - name:  🇵🇸 **free Palestine**
+        run: python3 ni.py
+        
