@@ -178,9 +178,9 @@ async def start_command(event):
             await event.reply(f"✅ You Are Approved.\nTime left: {time_left}.\n\nDev : @PythonBotz")
         else:
             del approved_users[user_id]
-            await event.reply("🚫 _Your Approval Has Expired. Contact @Seiao for renewal._")
+            await event.reply("🚫 Your Approval Has Expired. Contact @Seiao for renewal.")
     else:
-        await event.reply("**🚫 You are not Authorized to Use This Bot.\n_Contact @Seiao & @CodeRehan_ for approval.**")
+        await event.reply("**🚫 You are not Authorized to Use This Bot.\nContact @Seiao & @CodeRehan for approval.**")
     active_users.add(user_id)
 
 
