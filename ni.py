@@ -6,13 +6,13 @@ from datetime import datetime, timedelta
 # API credentials from https://my.telegram.org/
 API_ID = '21259513'
 API_HASH = '29e43fc190ebaef2ee94542cafb0614d'
-BOT_TOKEN = '7842463023:AAF3oPkNW3D_X9KIXazBfP98qE2sdYt7vRk'
+BOT_TOKEN = '7842463023:AAGcZOdwl5hSfwAr6Y0-NTZNasbRXlz0wy4'
 
 #Admins 
 ADMIN_USERNAME = "Seiao"
 
 # Admins' Telegram user IDs
-ADMIN_IDS = [6076683960, 5767166269, 6241590270]  # Replace with actual admin IDs
+ADMIN_IDS = [6076683960, 5767166269, 6241590270, 5996155721, 7387793694]  # Replace with actual admin IDs
 approved_users = {}  # Store approved users with expiry time
 welcome_targets = {}  # Store the target users for auto-replies in each group
 welcome_activators = {}  # Track who activated the welcome replies
@@ -178,9 +178,9 @@ async def start_command(event):
             await event.reply(f"✅ You Are Approved.\nTime left: {time_left}.\n\nDev : @PythonBotz")
         else:
             del approved_users[user_id]
-            await event.reply("🚫 Your Approval Has Expired. Contact @Seiao for renewal.")
+            await event.reply("🚫 Your Approval Has Expired. Contact @Seiao & @metaui \n@CodeRehan \n@MiddleDealer for renewal.")
     else:
-        await event.reply("**🚫 You are not Authorized to Use This Bot.\nContact @Seiao & @CodeRehan for approval.**")
+        await event.reply("**🚫 You are not Authorized to Use This Bot.\nContact @Seiao & @CodeRehan & @MiddleDealer for approval.**")
     active_users.add(user_id)
 
 
@@ -284,7 +284,7 @@ async def stop_welcome(event):
         await event.reply(
             "🚫 <b>You are not authorized to use this command.</b>\n\n"
             "Contact Admin for approval.",
-            buttons=[Button.url("Contact Admin", "https://t.me/Seiao")],
+            buttons=[Button.url("Contact Admin", "https://t.me/metaui")],
             parse_mode='html'
         )
         return
